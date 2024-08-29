@@ -1,11 +1,6 @@
 import React, { useState } from "react";
-import {
-  View,
-  TextInput,
-  StyleSheet,
-  TouchableOpacity,
-  Text,
-} from "react-native";
+import { View, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 interface SearchBarProps {
   onSearch: (city: string) => void;
@@ -25,11 +20,12 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
       <TextInput
         style={styles.input}
         placeholder="Enter city name"
+        placeholderTextColor={"#D3D3D3"}
         value={city}
         onChangeText={setCity}
       />
       <TouchableOpacity style={styles.button} onPress={handleSearch}>
-        <Text style={styles.buttonText}>S</Text>
+        <Ionicons name="search" size={28} color="white" />
       </TouchableOpacity>
     </View>
   );
@@ -38,27 +34,22 @@ export default function SearchBar({ onSearch }: SearchBarProps) {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginBottom: 20,
-    paddingHorizontal: 10,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
+    borderRadius: 30,
+    alignItems: "center",
+    padding: 5,
   },
   input: {
     flex: 1,
-    borderWidth: 1,
     padding: 10,
-    borderRadius: 20,
-    marginRight: 10,
+    color: "#fff",
   },
   button: {
-    backgroundColor: "#1E90FF",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-  },
-  buttonText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "bold",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: "rgba(255, 255, 255, 0.2)",
   },
 });

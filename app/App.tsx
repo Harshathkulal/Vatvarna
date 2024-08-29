@@ -1,28 +1,37 @@
-import React, { Component } from 'react';
-import { Text, View, StyleSheet, ActivityIndicator } from 'react-native';
-import SearchBar from './components/SearchBar';
+import React, { Component } from "react";
+import { Text, View, StyleSheet, ActivityIndicator } from "react-native";
+import SearchBar from "./components/SearchBar";
+import { SafeAreaView } from "react-native-safe-area-context";
+import DailyForecast from "./components/DailyForecast";
+import WeatherHome from "./components/WeatherHome";
 
 export default class WeatherApp extends Component {
   state = {
     weather: null,
     loading: true,
     error: null,
+    city: "London", // Default city
   };
 
   componentDidMount() {
-    this.fetchWeather();
+    this.fetchWeather(this.state.city);
   }
 
-  fetchWeather = async () => {
+  fetchWeather = async (city:string) => {
     try {
+      this.setState({ loading: true });
       const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=London&appid=YOUR_API_KEY&units=metric`
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=YOUR_API_KEY&units=metric`
       );
       const data = await response.json();
       this.setState({ weather: data, loading: false });
     } catch (error) {
-      this.setState({ error: 'Failed to fetch weather data', loading: false });
+      this.setState({ error: "Failed to fetch weather data", loading: false });
     }
+  };
+
+  handleSearch = (city:string) => {
+    this.setState({ city }, () => this.fetchWeather(city));
   };
 
   render() {
@@ -45,14 +54,11 @@ export default class WeatherApp extends Component {
     }
 
     return (
-      <View style={styles.container}>
-        <SearchBar onSearch={this.fetchWeather} />
-        <Text style={styles.cityName}>London</Text>
-        <Text style={styles.temperature}>25°C</Text>
-        <Text style={styles.weatherDescription}>
-          hot
-        </Text>
-      </View>
+      <SafeAreaView style={styles.container}>
+        <SearchBar onSearch={this.handleSearch} />
+        <WeatherHome />
+        <DailyForecast />
+      </SafeAreaView>
     );
   }
 }
@@ -60,26 +66,11 @@ export default class WeatherApp extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff',
-    padding: 20,
-  },
-  cityName: {
-    fontSize: 32,
-    fontWeight: 'bold',
-  },
-  temperature: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  weatherDescription: {
-    fontSize: 24,
-    fontStyle: 'italic',
+    paddingTop: 60,
+    padding: 10,
   },
   errorText: {
     fontSize: 18,
-    color: 'red',
+    color: "red",
   },
 });
