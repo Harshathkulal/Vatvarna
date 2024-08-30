@@ -34,7 +34,7 @@ export class DailyForecast extends Component {
               source={require("../../assets/images/sun.png")}
             />
             <Text style={styles.infoText}>Wednesday</Text>
-            <Text style={styles.TextTemp}>30°</Text>
+            <Text style={styles.TextTemp}>26°</Text>
           </View>
           <View style={styles.Forecastcontainer}>
             <Image

@@ -2,19 +2,47 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Image } from "expo-image";
 
-export default function WeatherHome() {
+type Weather = {
+  name: string;
+  sys: {
+    country: string;
+    sunrise: number;
+  };
+  main: {
+    temp: number;
+    humidity: number;
+  };
+  weather: {
+    description: string;
+    icon: string;
+  }[];
+  wind: {
+    speed: number;
+  };
+};
+
+type WeatherHomeProps = {
+  weather: Weather | null;
+};
+
+export default function WeatherHome({ weather }: WeatherHomeProps) {
+  if (!weather) return null;
+
+  const { name, sys, main, weather: weatherDetails, wind } = weather;
+  const weatherInfo = weatherDetails[0];
+
   return (
     <View style={styles.box}>
       <View style={styles.CityBox}>
-        <Text style={styles.cityName}>Mumbai,</Text>
-        <Text style={styles.Country}>India</Text>
+        <Text style={styles.cityName}>{name},</Text>
+        <Text style={styles.Country}>{sys.country}</Text>
       </View>
       <Image
         style={styles.weatherImage}
-        source={require("../../assets/images/partlycloudy.png")}
+        source={require("../../assets/images/sun.png")}
       />
-      <Text style={styles.temperature}>25°</Text>
-      <Text style={styles.weatherDescription}>Partly Cloudy</Text>
+      <Text style={styles.temperature}>{Math.round(main.temp)}°C</Text>
+      <Text style={styles.weatherDescription}>{weatherInfo.description}</Text>
 
       <View style={styles.otherInfo}>
         <View style={styles.infoItem}>
@@ -22,21 +50,26 @@ export default function WeatherHome() {
             style={styles.windImage}
             source={require("../../assets/images/wind.png")}
           />
-          <Text style={styles.infoText}>10 km/h</Text>
+          <Text style={styles.infoText}>{wind.speed} km/h</Text>
         </View>
         <View style={styles.infoItem}>
           <Image
             style={styles.windImage}
             source={require("../../assets/images/drop.png")}
           />
-          <Text style={styles.infoText}>60%</Text>
+          <Text style={styles.infoText}>{main.humidity}%</Text>
         </View>
         <View style={styles.infoItem}>
           <Image
             style={styles.windImage}
             source={require("../../assets/images/day.png")}
           />
-          <Text style={styles.infoText}>06:05 AM</Text>
+          <Text style={styles.infoText}>
+            {new Date().toLocaleTimeString([], {
+              hour: "2-digit",
+              minute: "2-digit",
+            })}
+          </Text>
         </View>
       </View>
     </View>
@@ -44,10 +77,6 @@ export default function WeatherHome() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
   box: {
     flex: 1,
     justifyContent: "center",
@@ -59,7 +88,6 @@ const styles = StyleSheet.create({
   },
   Country: {
     fontSize: 28,
-
     color: "#D3D3D3",
   },
   cityName: {
@@ -102,9 +130,5 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#D3D3D3",
     marginLeft: 5,
-  },
-  errorText: {
-    fontSize: 18,
-    color: "red",
   },
 });
