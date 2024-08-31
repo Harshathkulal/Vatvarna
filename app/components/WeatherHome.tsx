@@ -39,7 +39,7 @@ export default function WeatherHome({ weather }: WeatherHomeProps) {
       </View>
       <Image
         style={styles.weatherImage}
-        source={require("../../assets/images/sun.png")}
+        source={require("../../assets/images/partlycloudy.png")}
       />
       <Text style={styles.temperature}>{Math.round(main.temp)}°C</Text>
       <Text style={styles.weatherDescription}>{weatherInfo.description}</Text>
